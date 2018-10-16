@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>echarts 柱状图</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+    <h1>echarts 柱状图</h1>
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var rows = [];
+        $.ajax({
+            type: "get",
+            url: "http://127.0.0.1:3000/sales1",
+            dataType: "json",
+            success: function(result) {
+                console.log(result)
+                for (var key in result) {
+                    var v = result[key];
+                    rows.push({
+                        value: v,
+                        name: key
+                    })
+                }
+
+                var option = {
+                    title: {
+                        text: "某站点用户访问来源",
+                        subtext: "纯属虚构",
+                        x: "center"
+                    },
+                    series: [{
+                        name: "访问来源",
+                        type: "pie",
+                        radius: "55%",
+                        "center": ["50%", "60%"],
+                        data: rows
+                    }]
+                }
+
+                myChart.setOption(option);
+            }
+        })
+    </script>
+</body>
+
+</html>
