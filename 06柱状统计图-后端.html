@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>echarts </title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+    <h1>echarts </h1>
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        var names = [];
+        var nums = [];
+        $.ajax({
+            type: "get",
+            url: "http://127.0.0.1:3000/sales1",
+            dataType: "json",
+            success: function(result) {
+                // console.log(result)
+
+                for (var key in result) {
+                    names.push(key)
+
+                    nums.push(result[key])
+
+                }
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: 'ECharts 入门示例'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['销量']
+                    },
+                    xAxis: {
+                        data: names
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '销量',
+                        type: 'bar',
+                        data: nums
+                    }]
+                };
+
+
+                myChart.setOption(option);
+
+            }
+        })
+
+
+        // console.log(nums, names)
+    </script>
+</body>
+
+</html>
