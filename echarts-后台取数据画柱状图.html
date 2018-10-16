@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>echarts02</title>
+</head>
+
+<body>
+    <h1>ajax从后台后去数据画表</h1>
+    <div id="main" style="width:600px;height:400px;"></div>
+</body>
+<script src="js/jquery-1.7.2.min.js"></script>
+<script src="js/echarts.min.js"></script>
+<script>
+    var main = document.getElementById("main")
+    var myChart = echarts.init(main)
+    var option = {
+        title: {
+            text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+            data: ['销量']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: []
+        }]
+    }
+    console.log(option.xAxis.data)
+    myChart.setOption(option)
+
+    var names = [];
+    var banks = [];
+
+    $.ajax({
+        type: "get",
+        url: "http://127.0.0.1:3000/bank",
+        dataType: "json",
+        success: function(result) {
+            console.log(6, result)
+            for (var i = 0; i < result.length; i++) {
+                var item = result[i]
+                var name = item.name
+                var bank = item.bank
+                names.push(name)
+                banks.push(bank)
+
+            }
+            console.log(1, names)
+            console.log(2, banks)
+            var option = {
+                title: {
+                    text: 'ECharts 入门示例'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['销量']
+                },
+                xAxis: {
+                    data: names
+                },
+                yAxis: {},
+                series: [{
+                    name: '销量',
+                    type: 'bar',
+                    data: banks
+                }]
+            };
+
+
+            myChart.setOption(option);
+        }
+
+
+
+    })
+</script>
+
+</html>
