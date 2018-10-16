@@ -5,125 +5,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>echarts02</title>
+    <title>echarts 柱状图</title>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/echarts.min.js"></script>
 </head>
 
 <body>
-    <h1>ajax从后台后去数据画表</h1>
-    <div id="main" style="width:600px;height:400px;"></div>
-</body>
-<script src="js/jquery-1.7.2.min.js"></script>
-<script src="js/echarts.min.js"></script>
-<script>
-    var main = document.getElementById("main")
-    var myChart = echarts.init(main)
-    var option = {
-        title: {
-            text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        legend: {
-            data: ['销量']
-        },
-        xAxis: {
-            data: []
-        },
-        yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'bar',
-            data: []
-        }]
-    }
-    console.log(option.xAxis.data)
-    myChart.setOption(option)
+    <h1>echarts 柱状图</h1>
+    <div id="main" style="width: 600px;height:400px;"></div>
 
-    var names = [];
-    var banks = [];
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        var names = [];
+        var nums = [];
+        $.ajax({
+            type: "get",
+            url: "http://127.0.0.1:3000/sales1",
+            dataType: "json",
+            success: function(result) {
+                // console.log(result)
 
-    $.ajax({
-        type: "get",
-        url: "http://127.0.0.1:3000/bank",
-        dataType: "json",
-        success: function(result) {
-            // console.log(result)
-            for (var i = 0; i < result.length; i++) {
-                var item = result[i]
-                var name = item.name
-                var bank = item.bank
-                names.push(name)
-                banks.push(bank)
-
-                myChart.hideLoading(); //隐藏加载动画
-                myChart.setOption({ //加载数据图表
+                for (var key in result) {
+                    names.push(key)
+                        // console.log(1, key)
+                    nums.push(result[key])
+                        // console.log(1, result[key])
+                }
+                // 指定图表的配置项和数据
+                var option = {
+                    title: {
+                        text: 'ECharts 入门示例'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['销量']
+                    },
                     xAxis: {
                         data: names
                     },
+                    yAxis: {},
                     series: [{
-                        // 根据名字对应到相应的系列
                         name: '销量',
+                        type: 'bar',
                         data: nums
                     }]
-                });
+                };
+
+                // 使用刚指定的配置项和数据显示图表。
+                myChart.setOption(option);
 
             }
-            console.log(1, names)
-            console.log(2, banks)
-            option.xAxis.data = names;
-            option.series[0].data = banks;
+        })
 
-            console.log(3, option.xAxis.data)
-            console.log(4, option.series[0].data)
-        }
+        // option.xAxis.data = names;
+        // option.series[0].data = nums;
 
-
-
-
-        // console.log(names, banks)
-
-        //console.log(1, option.xAxis.data);
-        // console.log(2, option.series[0].data);
-    })
-
-
-    // var nums = [],
-    //     names = [];
-    // $.ajax({
-    //     type: "get",
-    //     async: true, //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-    //     url: "http://127.0.0.1:3000/bank", //请求发送到TestServlet处
-    //     data: {},
-    //     dataType: "json", //返回数据形式为json
-    //     success: function(result) {
-    //         //请求成功时执行该函数内容，result即为服务器返回的json对象
-    //         if (result) {
-    //             for (var i = 0; i < result.length; i++) {
-    //                 names.push(result[i].name); //挨个取出类别并填入类别数组
-    //             }
-    //             for (var i = 0; i < result.length; i++) {
-    //                 nums.push(result[i].num); //挨个取出销量并填入销量数组
-    //             }
-    //             myChart.hideLoading(); //隐藏加载动画
-    //             myChart.setOption({ //加载数据图表
-    //                 xAxis: {
-    //                     data: names
-    //                 },
-    //                 series: [{
-    //                     // 根据名字对应到相应的系列
-    //                     name: '销量',
-    //                     data: nums
-    //                 }]
-    //             });
-
-    //         }
-
-    //     },
-    //     error: function(errorMsg) {
-    //         //请求失败时执行该函数
-    //         alert("图表请求数据失败!");
-    //         myChart.hideLoading();
-    //     }
-    // })
-</script>
+        console.log(nums, names)
+    </script>
+</body>
 
 </html>
