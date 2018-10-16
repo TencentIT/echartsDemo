@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>echarts 仪表盘</title>
+    <script src="js/echarts.min.js"></script>
+</head>
+
+<body>
+    <h1>echarts 仪表盘</h1>
+    <div id="main" style="width: 600px;height:400px;"></div>
+
+    <script>
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 指定图表的配置项和数据
+        var option = {
+            toolitip: {
+                formatter: "{a} <br /> {b}:{c}%"
+            },
+            series: {
+                name: "业务指标",
+                type: "gauge",
+                detail: {
+                    formatter: "{value}%"
+                },
+                data: [{
+                    value: 1,
+                    name: "完成率"
+                }]
+
+            }
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+
+        //定时器
+        var v = 1;
+        var timer = setInterval(function() {
+            v++;
+            option.series.data[0].value = v;
+            myChart.setOption(option)
+            if (v >= 100)
+                clearInterval(timer)
+        }, 100)
+    </script>
+</body>
+
+</html>
